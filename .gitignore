@@ -1,7 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+###############################################################################
+# Frontend (Node/Next.js)                                                       
+###############################################################################
+# Dependencies
+frontend/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,32 +13,108 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# Build outputs / caches
 /.next/
-/out/
+out/
+coverage/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/build/
+frontend/.turbo/
+frontend/.cache/
+frontend/.vite/
+frontend/.swc/
+frontend/.eslintcache
+frontend/coverage/
+frontend/.vercel/
 
-# production
-/build
+# Env files in frontend
+frontend/.env*
 
-# misc
+# TypeScript/Next.js generated
+*.tsbuildinfo
+frontend/next-env.d.ts
+
+###############################################################################
+# Python / FastAPI                                                             
+###############################################################################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.direnv/
+.envrc
+.python-version
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit test / coverage reports
+.tox/
+.nox/
+.pytest_cache/
+coverage.xml
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+*.py,cover
+.cache/
+
+# Type checking / linters
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Env/config in backend
+backend/.env*
+
+# Logs
+*.log
+
+###############################################################################
+# Repository-wide misc                                                         
+###############################################################################
 .DS_Store
 *.pem
 
-# debug
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Env files (global, opt-in if needed)
 .env*
 
-# vercel
+# Vercel (root)
 .vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
