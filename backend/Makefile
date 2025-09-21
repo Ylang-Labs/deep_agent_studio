@@ -1,4 +1,4 @@
-.PHONY: all format lint test tests test_watch integration_tests docker_tests help extended_tests
+.PHONY: all format lint test tests test_watch integration_tests docker_tests help extended_tests run-dev
 
 # Default target executed when no arguments are given to make.
 all: help
@@ -50,6 +50,13 @@ spell_fix:
 	codespell --toml pyproject.toml -w
 
 ######################
+# DEVELOPMENT
+######################
+
+run-dev:
+	uvx --refresh --from "langgraph-cli[inmem]" --with-editable . --python 3.11 langgraph dev --allow-blocking
+
+######################
 # HELP
 ######################
 
@@ -61,4 +68,5 @@ help:
 	@echo 'tests                        - run unit tests'
 	@echo 'test TEST_FILE=<test_file>   - run all tests in file'
 	@echo 'test_watch                   - run unit tests in watch mode'
+	@echo 'run-dev                      - run LangGraph development server'
 
