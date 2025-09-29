@@ -23,7 +23,7 @@ from deep_researcher_agent.prompts import SUMMARIZE_WEB_SEARCH
 from deep_researcher_agent.state import DeepAgentState
 
 # Summarization model
-summarization_model = init_chat_model(model="google_genai:gemini-2.5-pro")
+summarization_model = init_chat_model(model="google_genai:gemini-2.5-flash")
 tavily_client = TavilyClient()
 
 
