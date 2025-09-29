@@ -173,7 +173,9 @@ const ThreadTodos: FC = () => {
 
   if (!todos.length) return null;
 
-  const completedCount = todos.filter((todo) => todo.status === "completed").length;
+  const completedCount = todos.filter(
+    (todo) => todo.status === "completed",
+  ).length;
   const allCompleted = completedCount === todos.length;
   const isUpdating = isRunning && !allCompleted;
 
@@ -209,10 +211,14 @@ const ThreadTodos: FC = () => {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
         >
-          <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+          <span className="flex items-center gap-2 text-sm font-medium text-foreground">
             <ListTodoIcon className="size-4 text-muted-foreground" />
-            <span>Task list</span>
-            <span className="text-xs text-muted-foreground/80">({todos.length})</span>
+            <span className="flex flex-row items-center gap-2">
+              <span>Task list</span>
+              <span className="text-xs font-normal text-muted-foreground/80">
+                {completedCount} of {todos.length} completed
+              </span>
+            </span>
           </span>
           <span className={cn("flex items-center gap-1.5 text-xs", statusTone)}>
             <span className="flex items-center gap-1">
