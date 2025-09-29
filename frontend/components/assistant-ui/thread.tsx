@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
@@ -5,18 +7,24 @@ import {
   ErrorPrimitive,
   MessagePrimitive,
   ThreadPrimitive,
+  useAssistantState,
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  CircleIcon,
   CheckIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   CopyIcon,
+  ListTodoIcon,
+  Loader2Icon,
   PencilIcon,
   RefreshCwIcon,
   Square,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { FC } from "react";
 
 import {
@@ -27,6 +35,8 @@ import {
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { ToolFallback } from "@/components/assistant-ui/tool-fallback";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import { useTodos } from "@/components/assistant-ui/todo-context";
+import type { AgentTodo, AgentTodoStatus } from "@/types/agentTodo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LazyMotion, MotionConfig, domAnimation } from "motion/react";
@@ -60,6 +70,185 @@ export const Thread: FC = () => {
         </ThreadPrimitive.Root>
       </MotionConfig>
     </LazyMotion>
+  );
+};
+
+const TODO_STATUS_BASE_CLASS =
+  "aui-thread-todos-status inline-flex h-6 w-6 items-center justify-center rounded-full border text-foreground/80";
+
+const getTodoItemAccent = (status: AgentTodoStatus) => {
+  switch (status) {
+    case "completed":
+      return "ring-border/60 bg-muted/40";
+    case "in_progress":
+      return "ring-primary/60 bg-primary/5";
+    default:
+      return "ring-border/60";
+  }
+};
+
+const TodoStatusBadge: FC<{ status: AgentTodoStatus }> = ({ status }) => {
+  if (status === "completed") {
+    return (
+      <span
+        className={cn(
+          TODO_STATUS_BASE_CLASS,
+          "aui-thread-todos-status-completed border-border/60 bg-muted text-foreground",
+        )}
+        aria-label="Completed"
+        title="Completed"
+      >
+        <CheckIcon className="size-3" />
+        <span className="aui-thread-todos-status-sr sr-only">Completed</span>
+      </span>
+    );
+  }
+
+  if (status === "in_progress") {
+    return (
+      <span
+        className={cn(
+          TODO_STATUS_BASE_CLASS,
+          "aui-thread-todos-status-progress border-border/60 text-foreground/70",
+        )}
+        aria-label="In progress"
+        title="In progress"
+      >
+        <Loader2Icon className="size-3 animate-spin" />
+        <span className="aui-thread-todos-status-sr sr-only">In progress</span>
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={cn(
+        TODO_STATUS_BASE_CLASS,
+        "aui-thread-todos-status-pending border-border/50 text-muted-foreground",
+      )}
+      aria-label="Pending"
+      title="Pending"
+    >
+      <CircleIcon className="size-3" />
+      <span className="aui-thread-todos-status-sr sr-only">Pending</span>
+    </span>
+  );
+};
+
+const RECENT_HIGHLIGHT_DURATION_MS = 2000;
+
+const ThreadTodos: FC = () => {
+  const { todos, lastUpdatedAt } = useTodos();
+  const isRunning = useAssistantState(({ thread }) => thread.isRunning);
+  const [isOpen, setIsOpen] = useState(true);
+  const [recentlyUpdated, setRecentlyUpdated] = useState(false);
+  const [previousTodoCount, setPreviousTodoCount] = useState(0);
+
+  useEffect(() => {
+    if (!todos.length) {
+      setIsOpen(false);
+      setPreviousTodoCount(0);
+      return;
+    }
+
+    if (previousTodoCount === 0 && todos.length > 0) {
+      setIsOpen(true);
+    }
+    setPreviousTodoCount(todos.length);
+  }, [todos.length, previousTodoCount]);
+
+  useEffect(() => {
+    if (!todos.length || !lastUpdatedAt) {
+      setRecentlyUpdated(false);
+      return;
+    }
+
+    setRecentlyUpdated(true);
+    const timeoutId = window.setTimeout(
+      () => setRecentlyUpdated(false),
+      RECENT_HIGHLIGHT_DURATION_MS,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [lastUpdatedAt, todos.length]);
+
+  if (!todos.length) return null;
+
+  const completedCount = todos.filter((todo) => todo.status === "completed").length;
+  const allCompleted = completedCount === todos.length;
+  const isUpdating = isRunning && !allCompleted;
+
+  const statusLabel = isUpdating
+    ? "Updating"
+    : allCompleted
+      ? "Complete"
+      : `${completedCount}/${todos.length} complete`;
+  const statusTone = isUpdating
+    ? "text-foreground/60"
+    : allCompleted
+      ? "text-foreground/70"
+      : "text-muted-foreground";
+  const statusIcon = isUpdating ? (
+    <Loader2Icon className="size-3 animate-spin" />
+  ) : allCompleted ? (
+    <CheckIcon className="size-3" />
+  ) : (
+    <CircleIcon className="size-3" />
+  );
+
+  return (
+    <div className="aui-thread-todos-wrapper mx-auto w-full max-w-[var(--thread-max-width)] px-2">
+      <div
+        className={cn(
+          "aui-thread-todos-card rounded-2xl border border-border/60 bg-background/60 text-sm shadow-sm transition-all dark:bg-background/50",
+          recentlyUpdated && "ring-2 ring-primary/25",
+        )}
+      >
+        <button
+          type="button"
+          className="aui-thread-todos-toggle flex w-full items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 text-left"
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-expanded={isOpen}
+        >
+          <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+            <ListTodoIcon className="size-4 text-muted-foreground" />
+            <span>Task list</span>
+            <span className="text-xs text-muted-foreground/80">({todos.length})</span>
+          </span>
+          <span className={cn("flex items-center gap-1.5 text-xs", statusTone)}>
+            <span className="flex items-center gap-1">
+              {statusIcon}
+              {statusLabel}
+            </span>
+            <ChevronDownIcon
+              className={cn(
+                "size-4 transition-transform",
+                isOpen ? "rotate-180" : "rotate-0",
+              )}
+            />
+          </span>
+        </button>
+        {isOpen ? (
+          <div className="aui-thread-todos-content px-3.5 pb-3">
+            <ul className="mt-1.5 space-y-1.5">
+              {todos.map((todo: AgentTodo, index) => (
+                <li
+                  key={`${todo.content}-${index}`}
+                  className={cn(
+                    "aui-thread-todos-item flex items-start gap-3 rounded-xl border border-border/60 bg-muted/40 px-3 py-2 text-[13px] shadow-sm dark:bg-muted/20",
+                    getTodoItemAccent(todo.status),
+                  )}
+                >
+                  <TodoStatusBadge status={todo.status} />
+                  <span className="aui-thread-todos-text flex-1 leading-5 text-foreground/90">
+                    {todo.content}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 };
 
@@ -169,6 +358,7 @@ const Composer: FC = () => {
   return (
     <div className="aui-composer-wrapper sticky bottom-0 mx-auto flex w-full max-w-[var(--thread-max-width)] flex-col gap-4 overflow-visible rounded-t-3xl bg-background pb-4 md:pb-6">
       <ThreadScrollToBottom />
+      <ThreadTodos />
       <ThreadPrimitive.Empty>
         <ThreadWelcomeSuggestions />
       </ThreadPrimitive.Empty>
