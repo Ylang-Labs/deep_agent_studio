@@ -87,6 +87,6 @@ agent = create_react_agent(
     all_tools,
     prompt=INSTRUCTIONS,
     state_schema=DeepAgentState,
-)
+).with_config({"recursion_limit": 50})
 
 __all__ = ["agent"]
