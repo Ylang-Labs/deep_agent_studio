@@ -4,7 +4,12 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useLangGraphRuntime } from "@assistant-ui/react-langgraph";
 
-import { createThread, getThreadState, sendMessage } from "@/lib/chatApi";
+import {
+  createThread,
+  getThreadState,
+  sendMessage,
+  type RunnableConfig,
+} from "@/lib/chatApi";
 import { TodosProvider } from "@/components/assistant-ui/todo-context";
 import { FilesProvider } from "@/components/assistant-ui/files-context";
 import { FilesSidebar } from "@/components/assistant-ui/files-sidebar";
@@ -48,6 +53,10 @@ const parseFiles = (value: unknown): Record<string, string> | undefined => {
   ) as Array<[string, string]>;
 
   return Object.fromEntries(sanitizedEntries);
+};
+
+const isRunnableConfig = (value: unknown): value is RunnableConfig => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 
 const MAX_STATE_SEARCH_DEPTH = 6;
@@ -184,11 +193,14 @@ export function MyAssistant() {
         threadIdRef.current = thread_id;
       }
       const threadId = threadIdRef.current;
+      const normalizedRunConfig = isRunnableConfig(runConfig)
+        ? runConfig
+        : undefined;
       const stream = await sendMessage({
         threadId,
         messages,
         command,
-        runConfig,
+        runConfig: normalizedRunConfig,
         abortSignal,
       });
 

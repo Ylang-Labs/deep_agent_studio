@@ -180,7 +180,7 @@ const ThreadTodos: FC = () => {
   const isUpdating = isRunning && !allCompleted;
 
   const statusLabel = isUpdating
-    ? "Updating"
+    ? ""
     : allCompleted
       ? "Complete"
       : `${completedCount}/${todos.length} complete`;
