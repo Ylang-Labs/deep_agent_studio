@@ -33,7 +33,7 @@ const markdownComponents: Components = {
   a: ({ className, ...props }) => (
     <a
       className={cn(
-        "aui-files-preview-link font-medium text-primary underline underline-offset-4",
+        "aui-files-preview-link font-medium break-words text-primary underline underline-offset-4",
         className,
       )}
       {...props}
@@ -88,7 +88,7 @@ const markdownComponents: Components = {
   p: ({ className, ...props }) => (
     <p
       className={cn(
-        "aui-files-preview-paragraph my-4 leading-6 text-foreground/90 first:mt-0 last:mb-0",
+        "aui-files-preview-paragraph my-4 leading-6 break-words text-foreground/90 first:mt-0 last:mb-0",
         className,
       )}
       {...props}
@@ -97,7 +97,7 @@ const markdownComponents: Components = {
   pre: ({ className, ...props }) => (
     <pre
       className={cn(
-        "aui-files-preview-pre rounded-xl bg-muted/40 p-4 text-xs leading-6 break-words whitespace-pre-wrap text-foreground/90 shadow-inner",
+        "aui-files-preview-pre overflow-x-auto rounded-xl bg-muted/40 p-4 text-xs leading-6 whitespace-pre text-foreground/90 shadow-inner",
         className,
       )}
       {...props}
@@ -117,7 +117,7 @@ const markdownComponents: Components = {
   td: ({ className, ...props }) => (
     <td
       className={cn(
-        "aui-files-preview-td border-t border-border/50 px-4 py-2 align-top",
+        "aui-files-preview-td border-t border-border/50 px-4 py-2 align-top break-words",
         className,
       )}
       {...props}
@@ -126,7 +126,7 @@ const markdownComponents: Components = {
   th: ({ className, ...props }) => (
     <th
       className={cn(
-        "aui-files-preview-th border-b border-border/60 bg-muted/60 px-4 py-2 text-left font-semibold",
+        "aui-files-preview-th border-b border-border/60 bg-muted/60 px-4 py-2 text-left font-semibold break-words",
         className,
       )}
       {...props}
@@ -136,6 +136,15 @@ const markdownComponents: Components = {
     <ul
       className={cn(
         "aui-files-preview-ul my-4 ml-6 list-disc [&>li]:mt-2",
+        className,
+      )}
+      {...props}
+    />
+  ),
+  li: ({ className, ...props }) => (
+    <li
+      className={cn(
+        "aui-files-preview-li break-words text-foreground/90",
         className,
       )}
       {...props}
@@ -281,8 +290,8 @@ export const FilesSidebar = () => {
                 <DialogContent className="aui-files-preview-dialog max-w-4xl gap-0 overflow-hidden p-0">
                   {previewFile ? (
                     <>
-                      <DialogHeader className="flex flex-row items-start justify-between gap-3 px-6 pt-6 pb-0">
-                        <DialogTitle className="flex items-center gap-2 text-base">
+                      <DialogHeader className="flex min-w-0 flex-row items-start justify-between gap-3 px-6 pt-6 pb-0">
+                        <DialogTitle className="flex min-w-0 items-center gap-2 text-base">
                           <FileTextIcon className="size-4 text-muted-foreground" />
                           <span className="truncate" title={previewFile.name}>
                             {previewFile.name}
@@ -307,7 +316,7 @@ export const FilesSidebar = () => {
                           )}
                         </TooltipIconButton>
                       </DialogHeader>
-                      <div className="aui-files-preview-dialog-body m-2 max-h-[70vh] overflow-y-auto rounded-sm border-1 px-6 py-6">
+                      <div className="aui-files-preview-dialog-body m-2 max-h-[70vh] overflow-x-auto overflow-y-auto rounded-sm border-1 px-6 py-6 break-words">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           components={markdownComponents}
