@@ -1,12 +1,16 @@
-# Open Deep Researcher Agent
+# Deep Agent Studio
 
-_Built with love by [@artreimus](https://github.com/artreimus) from [Ylang Labs](https://github.com/ylang-labs)_
+_Built with ❤️ by [@artreimus](https://github.com/artreimus) from [Ylang Labs](https://github.com/ylang-labs)_
 
-> Production-ready example of a **LangGraph deep agent**: a research assistant that plans via TODOs, offloads context into a virtual file system, and delegates to scoped sub-agents. The backend exposes these capabilities through a LangGraph server; the frontend turns them into a polished assistant-ui experience.
+Production-ready example of a **LangGraph deep agent**: a research assistant that plans via TODOs, offloads context into a virtual file system, and delegates to scoped sub-agents. The backend exposes these capabilities through a LangGraph server; the frontend turns them into a polished assistant-ui experience.
 
-## App Preview
+## 📸 App
 
-![Main assistant interface](./.png)
+![Demo](./public/demo.gif)
+![Main assistant interface](./public/image-1.png)
+![File sidebar](./public/image-2.png)
+![Settings panel](./public/image-3.png)
+![Research summary](./public/image-4.png)
 
 ## Deep Agent Primer
 
@@ -73,8 +77,14 @@ Ask a research question to watch the agent plan tasks, delegate subtasks, and su
 
 ## License
 
-This project is distributed under the MIT License. See `LICENSE` for the full text.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-If this project helps your workflow, consider starring the repository and sharing feedback with the community.
+<div align="center">
+
+**⭐ If you find this project useful, please give it a star! ⭐**
+
+Built with ❤️ by [@artreimus](https://github.com/artreimus) from [Ylang Labs](https://github.com/ylang-labs)
+
+</div>
