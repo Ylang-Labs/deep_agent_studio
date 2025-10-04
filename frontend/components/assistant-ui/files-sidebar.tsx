@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CopyIcon,
   FileTextIcon,
   FolderIcon,
@@ -151,6 +153,7 @@ export const FilesSidebar = () => {
     content: string;
   } | null>(null);
   const [isCopied, setIsCopied] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const copyTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -192,102 +195,134 @@ export const FilesSidebar = () => {
     return null;
   }
 
+  const toggleSidebar = () => {
+    setIsOpen((previous) => {
+      const next = !previous;
+      if (!next) {
+        setPreviewFile(null);
+      }
+      return next;
+    });
+  };
+
   return (
-    <aside className="aui-files-sidebar hidden h-full w-72 shrink-0 border-l border-border/50 bg-gradient-to-b from-muted/20 via-background/40 to-muted/30 p-4 text-sm shadow-inner backdrop-blur lg:sticky lg:top-0 lg:flex lg:flex-col lg:overflow-y-auto xl:w-80">
-      <header className="aui-files-sidebar-header sticky top-0 z-10 mb-3 flex items-center justify-between gap-2 border-b border-border/50 bg-background/80 px-1 pb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase backdrop-blur">
-        <span className="flex items-center gap-2">
-          <FolderIcon className="size-4 text-muted-foreground" /> Files
-        </span>
-        <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground/90">
-          {fileEntries.length}
-        </span>
-      </header>
-      <div className="aui-files-sidebar-list space-y-2 overflow-y-auto pr-1">
-        {fileEntries.map(([name, content]) => {
-          return (
-            <article
-              key={name}
-              className={cn(
-                "aui-files-sidebar-item group rounded-xl border border-border/60 bg-background/80 p-3 shadow-sm transition hover:border-border/40",
-              )}
-            >
-              <button
-                type="button"
-                className="aui-files-sidebar-trigger flex w-full flex-col gap-2 text-left"
-                onClick={() => setPreviewFile({ name, content })}
-                aria-label={`Open ${name}`}
-              >
-                <header className="flex items-center justify-between gap-2">
-                  <div className="flex min-w-0 items-center gap-2 text-foreground">
-                    <FileTextIcon className="size-4 text-muted-foreground" />
-                    <span className="truncate text-sm font-medium" title={name}>
-                      {name}
-                    </span>
-                  </div>
-                  <span
-                    className="aui-files-sidebar-open inline-flex size-7 items-center justify-center rounded-full border border-border/60 bg-background/90 text-muted-foreground transition group-hover:border-border/40 group-hover:text-foreground"
-                    aria-hidden
-                  >
-                    <Maximize2Icon className="size-4" />
-                  </span>
-                </header>
-                <div className="aui-files-sidebar-preview text-xs leading-5 text-muted-foreground">
-                  <p className="line-clamp-4 whitespace-pre-wrap text-muted-foreground/80">
-                    {truncate(content, MAX_INLINE_PREVIEW)}
-                  </p>
-                </div>
-              </button>
-            </article>
-          );
-        })}
-      </div>
-      <Dialog
-        open={previewFile !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setPreviewFile(null);
-          }
-        }}
-      >
-        <DialogContent className="aui-files-preview-dialog max-w-4xl gap-4 overflow-hidden p-0">
-          {previewFile ? (
-            <>
-              <DialogHeader className="flex flex-row items-start justify-between gap-3 px-6 pt-6 pb-0">
-                <DialogTitle className="flex items-center gap-2 text-base">
-                  <FileTextIcon className="size-4 text-muted-foreground" />
-                  <span className="truncate" title={previewFile.name}>
-                    {previewFile.name}
-                  </span>
-                </DialogTitle>
-                <TooltipIconButton
-                  tooltip={isCopied ? "Copied" : "Copy"}
-                  aria-label={isCopied ? "File copied" : "Copy file contents"}
-                  onClick={handleCopy}
+    <>
+      {isOpen && (
+        <aside className="aui-files-sidebar hidden h-full w-72 shrink-0 border-l border-border/50 bg-gradient-to-b from-muted/20 via-background/40 to-muted/30 p-4 text-sm shadow-inner backdrop-blur lg:sticky lg:top-0 lg:flex lg:flex-col lg:overflow-y-auto xl:w-80">
+          <header className="aui-files-sidebar-header sticky top-0 z-10 mb-3 flex items-center gap-2 border-b border-border/50 bg-background/80 px-1 pb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase backdrop-blur">
+            <span className="flex items-center gap-2">
+              <FolderIcon className="size-4 text-muted-foreground" /> Files
+            </span>
+            <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground/90">
+              {fileEntries.length}
+            </span>
+          </header>
+          <div className="aui-files-sidebar-list space-y-2 overflow-y-auto pr-1">
+            {fileEntries.map(([name, content]) => {
+              return (
+                <article
+                  key={name}
                   className={cn(
-                    "aui-files-preview-copy mr-4 size-8 rounded-full border border-border/60 text-muted-foreground transition",
-                    "hover:border-border/40 hover:text-foreground",
-                    "focus-visible:ring-1 focus-visible:ring-primary/60",
+                    "aui-files-sidebar-item group rounded-xl border border-border/60 bg-background/80 p-3 shadow-sm transition hover:border-border/40",
                   )}
                 >
-                  {isCopied ? (
-                    <CheckIcon className="size-4" />
-                  ) : (
-                    <CopyIcon className="size-4" />
-                  )}
-                </TooltipIconButton>
-              </DialogHeader>
-              <div className="aui-files-preview-dialog-body m-2 max-h-[70vh] overflow-y-auto rounded-sm border-1 px-6 py-6">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={markdownComponents}
-                >
-                  {previewFile.content}
-                </ReactMarkdown>
-              </div>
-            </>
-          ) : null}
-        </DialogContent>
-      </Dialog>
-    </aside>
+                  <button
+                    type="button"
+                    className="aui-files-sidebar-trigger flex w-full flex-col gap-2 text-left"
+                    onClick={() => setPreviewFile({ name, content })}
+                    aria-label={`Open ${name}`}
+                  >
+                    <header className="flex items-center justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2 text-foreground">
+                        <FileTextIcon className="size-4 text-muted-foreground" />
+                        <span
+                          className="truncate text-sm font-medium"
+                          title={name}
+                        >
+                          {name}
+                        </span>
+                      </div>
+                      <span
+                        className="aui-files-sidebar-open flex h-7 w-7 flex-none items-center justify-center rounded-full border border-border/60 bg-background/90 text-muted-foreground transition group-hover:border-border/40 group-hover:text-foreground"
+                        aria-hidden
+                      >
+                        <Maximize2Icon className="size-4" />
+                      </span>
+                    </header>
+                    <div className="aui-files-sidebar-preview text-xs leading-5 text-muted-foreground">
+                      <p className="line-clamp-4 whitespace-pre-wrap text-muted-foreground/80">
+                        {truncate(content, MAX_INLINE_PREVIEW)}
+                      </p>
+                    </div>
+                  </button>
+                </article>
+              );
+            })}
+          </div>
+          <Dialog
+            open={previewFile !== null}
+            onOpenChange={(open) => {
+              if (!open) {
+                setPreviewFile(null);
+              }
+            }}
+          >
+            <DialogContent className="aui-files-preview-dialog max-w-4xl gap-0 overflow-hidden p-0">
+              {previewFile ? (
+                <>
+                  <DialogHeader className="flex flex-row items-start justify-between gap-3 px-6 pt-6 pb-0">
+                    <DialogTitle className="flex items-center gap-2 text-base">
+                      <FileTextIcon className="size-4 text-muted-foreground" />
+                      <span className="truncate" title={previewFile.name}>
+                        {previewFile.name}
+                      </span>
+                    </DialogTitle>
+                    <TooltipIconButton
+                      tooltip={isCopied ? "Copied" : "Copy"}
+                      aria-label={
+                        isCopied ? "File copied" : "Copy file contents"
+                      }
+                      onClick={handleCopy}
+                      className={cn(
+                        "aui-files-preview-copy mr-4 size-8 rounded-full border border-border/60 text-muted-foreground transition",
+                        "hover:border-border/40 hover:text-foreground",
+                        "focus-visible:ring-1 focus-visible:ring-primary/60",
+                      )}
+                    >
+                      {isCopied ? (
+                        <CheckIcon className="size-4" />
+                      ) : (
+                        <CopyIcon className="size-4" />
+                      )}
+                    </TooltipIconButton>
+                  </DialogHeader>
+                  <div className="aui-files-preview-dialog-body m-2 max-h-[70vh] overflow-y-auto rounded-sm border-1 px-6 py-6">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={markdownComponents}
+                    >
+                      {previewFile.content}
+                    </ReactMarkdown>
+                  </div>
+                </>
+              ) : null}
+            </DialogContent>
+          </Dialog>
+        </aside>
+      )}
+      <TooltipIconButton
+        tooltip={isOpen ? "Hide files" : "Show files"}
+        aria-label={isOpen ? "Hide files" : "Show files"}
+        aria-expanded={isOpen}
+        onClick={toggleSidebar}
+        className="aui-files-sidebar-floating-toggle fixed top-2 right-6 z-40 hidden size-10 items-center justify-center rounded-full border border-border/60 bg-background/95 text-muted-foreground shadow-lg transition hover:border-border/40 hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary/60 lg:inline-flex"
+      >
+        {isOpen ? (
+          <ChevronRightIcon className="size-5" />
+        ) : (
+          <ChevronLeftIcon className="size-5" />
+        )}
+      </TooltipIconButton>
+    </>
   );
 };
