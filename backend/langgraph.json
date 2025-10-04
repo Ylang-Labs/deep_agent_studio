@@ -2,7 +2,6 @@
   "$schema": "https://langgra.ph/schema.json",
   "dependencies": ["."],
   "graphs": {
-    "react_agent": "./src/react_agent/graph.py:graph",
     "deep_researcher_agent": "./src/deep_researcher_agent/agent.py:agent"
   },
   "env": ".env"
