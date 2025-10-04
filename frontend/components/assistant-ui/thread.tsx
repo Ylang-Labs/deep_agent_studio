@@ -284,7 +284,7 @@ const ThreadWelcome: FC = () => {
               exit={{ opacity: 0, y: 10 }}
               className="aui-thread-welcome-message-motion-1 text-2xl font-semibold"
             >
-              Hello there!
+              Welcome to Deep Agent Studio.
             </m.div>
             <m.div
               initial={{ opacity: 0, y: 10 }}
@@ -293,7 +293,8 @@ const ThreadWelcome: FC = () => {
               transition={{ delay: 0.1 }}
               className="aui-thread-welcome-message-motion-2 text-2xl text-muted-foreground/65"
             >
-              How can I help you today?
+              Point me at the signal you need—I'll surface crisp insights,
+              sources, and next steps.
             </m.div>
           </div>
         </div>
@@ -307,24 +308,28 @@ const ThreadWelcomeSuggestions: FC = () => {
     <div className="aui-thread-welcome-suggestions grid w-full gap-2 @md:grid-cols-2">
       {[
         {
-          title: "What's the weather",
-          label: "in San Francisco?",
-          action: "What's the weather in San Francisco?",
+          title: "Map the market",
+          label: "for consumer AI photo assistants",
+          action:
+            "Produce a market overview for consumer AI photo assistant apps, covering key players, pricing, and user segments.",
         },
         {
-          title: "Explain React hooks",
-          label: "like useState and useEffect",
-          action: "Explain React hooks like useState and useEffect",
+          title: "Digest fresh research",
+          label: "on multimodal recommendation",
+          action:
+            "Summarize the latest papers on multimodal recommendation systems and highlight implications for a consumer product roadmap.",
         },
         {
-          title: "Write a SQL query",
-          label: "to find top customers",
-          action: "Write a SQL query to find top customers",
+          title: "Benchmark competitors",
+          label: "in AI personal finance",
+          action:
+            "Compare the leading AI personal finance companions, detailing differentiators, pricing strategies, and user feedback signals.",
         },
         {
-          title: "Create a meal plan",
-          label: "for healthy weight loss",
-          action: "Create a meal plan for healthy weight loss",
+          title: "Craft a launch brief",
+          label: "for an AI research concierge",
+          action:
+            "Draft a go-to-market brief for launching a consumer AI research concierge, including positioning, messaging pillars, and launch milestones.",
         },
       ].map((suggestedAction, index) => (
         <m.div
