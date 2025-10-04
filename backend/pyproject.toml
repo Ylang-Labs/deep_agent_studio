@@ -32,13 +32,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = [
-    "langgraph.templates.react_agent",
-    "react_agent",
     "deep_researcher_agent",
 ]
 [tool.setuptools.package-dir]
-"langgraph.templates.react_agent" = "src/react_agent"
-"react_agent" = "src/react_agent"
 "deep_researcher_agent" = "src/deep_researcher_agent"
 
 
