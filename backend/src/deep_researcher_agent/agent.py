@@ -24,7 +24,7 @@ from deep_researcher_agent.research_tools import (
 )
 from deep_researcher_agent.state import DeepAgentState
 from deep_researcher_agent.task_tool import _create_task_tool
-from deep_researcher_agent.todo_tools import write_todos
+from deep_researcher_agent.todo_tools import write_todos, read_todos
 
 # Model configuration matches the tutorial agent for consistent behaviour.
 model = init_chat_model(model="google_genai:gemini-2.5-pro", temperature=0.0)
@@ -37,7 +37,7 @@ max_researcher_iterations = 3
 sub_agent_tools = [tavily_search, think_tool]
 
 # Core tools available to the primary agent.
-built_in_tools = [ls, read_file, write_file, write_todos, think_tool]
+built_in_tools = [ls, read_file, write_file, write_todos, read_todos, think_tool]
 
 # Define the specialized research sub-agent configuration.
 research_sub_agent = {
