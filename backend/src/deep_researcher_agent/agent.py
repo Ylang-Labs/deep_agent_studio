@@ -27,7 +27,7 @@ from deep_researcher_agent.task_tool import _create_task_tool
 from deep_researcher_agent.todo_tools import write_todos, read_todos
 
 # Model configuration matches the tutorial agent for consistent behaviour.
-model = init_chat_model(model="google_genai:gemini-2.5-pro", temperature=0.0)
+model = init_chat_model(model="anthropic:claude-sonnet-4-5-20250929", temperature=0)
 
 # Limits for delegation and sub-agent coordination.
 max_concurrent_research_units = 3

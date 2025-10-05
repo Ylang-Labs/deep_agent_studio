@@ -23,7 +23,9 @@ from deep_researcher_agent.prompts import SUMMARIZE_WEB_SEARCH
 from deep_researcher_agent.state import DeepAgentState
 
 # Summarization model
-summarization_model = init_chat_model(model="google_genai:gemini-2.5-flash")
+summarization_model = init_chat_model(
+    model="anthropic:claude-sonnet-4-5-20250929", temperature=0.4
+)
 tavily_client = TavilyClient()
 
 
