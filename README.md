@@ -14,9 +14,11 @@ Production-ready example of a **LangGraph deep agent**: a research assistant tha
 
 ## Deep Agent Primer
 
+![Deep Agent](./public/deep-agent.png)
+
 Deep agents extend the classic ReAct loop with extra structure so they can tackle long-horizon tasks:
 
-- **Structured planning:** The agent keeps a typed TODO list, reciting progress for transparency.
+- **Structured planning:** The agent keeps a typed TODO list and think tool for planning.
 - **Context offloading:** A virtual file system in graph state stores notes, drafts, and artifacts without ballooning token usage.
 - **Delegated research:** A specialized sub-agent handles focused web research using Tavily and reflection tools while respecting concurrency limits.
 - **Stateful UX:** The frontend subscribes to LangGraph updates to mirror todos and files in real time, so humans can co-pilot the workflow.
