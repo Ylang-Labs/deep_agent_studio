@@ -1,16 +1,16 @@
-# Deep Agent Studio
+# 🌊 Deep Agent Studio
 
 _Built with ❤️ by [@artreimus](https://github.com/artreimus) from [Ylang Labs](https://github.com/ylang-labs)_
 
-Production-ready example of a **LangGraph deep agent**: a research assistant that plans via TODOs, offloads context into a virtual file system, and delegates to scoped sub-agents. The backend exposes these capabilities through a LangGraph server; the frontend turns them into a polished assistant-ui experience.
+Production-ready example of a **LangGraph deep agent**: a deep research assistant that plans via TODOs and a `think` tool, offloads context into a virtual file system, and delegates to scoped sub-agents. The backend exposes these capabilities through a LangGraph server; the frontend turns them into a polished assistant-ui experience.
 
 ## 📸 App
 
 ![Demo](./public/demo.gif)
 ![Main assistant interface](./public/image-1.png)
-![File sidebar](./public/image-2.png)
-![Settings panel](./public/image-3.png)
-![Research summary](./public/image-4.png)
+![Todo List](./public/image-2.png)
+![File System](./public/image-3.png)
+![File preview](./public/image-4.png)
 
 ## Deep Agent Primer
 
@@ -18,9 +18,9 @@ Production-ready example of a **LangGraph deep agent**: a research assistant tha
 
 Deep agents extend the classic ReAct loop with extra structure so they can tackle long-horizon tasks:
 
-- **Structured planning:** The agent keeps a typed TODO list and think tool for planning.
+- **Structured planning:** The agent keeps a typed TODO list and uses a dedicated `think` tool for inline planning and reflection.
 - **Context offloading:** A virtual file system in graph state stores notes, drafts, and artifacts without ballooning token usage.
-- **Delegated research:** A specialized sub-agent handles focused web research using Tavily and reflection tools while respecting concurrency limits.
+- **Delegated research:** A specialized sub-agent handles focused web research using Tavily and the same `think` tool while respecting concurrency limits.
 - **Stateful UX:** The frontend subscribes to LangGraph updates to mirror todos and files in real time, so humans can co-pilot the workflow.
 
 ## Architecture
